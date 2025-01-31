@@ -1,3 +1,4 @@
+import os
 import socket
 
 # UNIXドメインソケットとデータグラム（非接続）ソケットを作成します
@@ -17,10 +18,15 @@ message = b'Message to send to the client.'
 # このクライアントのアドレスをソケットに紐付けます。
 # これはUNIXドメインソケットの場合に限ります。
 # このアドレスは、サーバによって送信元アドレスとして受け取られます。
+# 既存のソケットファイルを削除（存在する場合）
+if os.path.exists(address):
+    os.remove(address)
 sock.bind(address)
+
 
 try:
     # サーバにメッセージを送信します
+    message = input("what do you want ?").encode()
     print('sending {!r}'.format(message))
     sent = sock.sendto(message, server_address)
 

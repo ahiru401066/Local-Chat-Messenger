@@ -35,6 +35,6 @@ while True:
 
     # 受信したデータをそのまま送信元に送り返します。
     if data:
-        sent = sock.sendto(data, address)
+        sent = sock.sendto("ok!!!".encode(), address)
         # 送信したバイト数と送信先のアドレスを表示します。
         print('sent {} bytes back to {}'.format(sent, address))
