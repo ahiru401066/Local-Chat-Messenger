@@ -22,17 +22,18 @@ sock.bind(address)
 
 try:
     while(True):
-        message = input("what do you want ?").encode()
+        message = input("please a message ?").encode()
         #サーバーに送信
         sent = sock.sendto(message, server_address)
 
         decodeMassage = message.decode()
-        print('sending：{!r}'.format(decodeMassage))
+        print('---sending：{!r}'.format(decodeMassage))
 
         #exitの場合は終了
         if(decodeMassage == "exit"):
             print('closing socket')
             sock.close()
+            break
 
         # サーバからの応答を待ち受ける
         print('\n-----waiting to receive-----')

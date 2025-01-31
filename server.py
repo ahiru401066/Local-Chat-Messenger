@@ -1,5 +1,9 @@
+from faker import Faker
 import socket
 import os
+
+#fakerのインスタンス化
+fake = Faker('jp-JP')
 
 #AF_UNIXはUNIXドメインソケット、SOCK_DGRAMはデータグラムソケット
 sock = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
@@ -35,8 +39,9 @@ while True:
     if(decodeMassage == "exit"):
         print('closing socket')
         sock.close()
+        break
         
     if data:
-        sent = sock.sendto("next?".encode(), address)
+        sent = sock.sendto(fake.job().encode(), address)
         # 送信したバイト数と送信先のアドレスを表示します。
         print('sent {} bytes back to {}'.format(sent, address))
