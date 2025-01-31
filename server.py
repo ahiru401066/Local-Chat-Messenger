@@ -1,40 +1,42 @@
 import socket
 import os
 
-# socket.socket関数を使用して、新しいソケットを作成します。
-# AF_UNIXはUNIXドメインソケットを表し、SOCK_DGRAMはデータグラムソケットを表します。
+#AF_UNIXはUNIXドメインソケット、SOCK_DGRAMはデータグラムソケット
 sock = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
 
-# サーバが接続を待ち受けるUNIXドメインソケットのパスを指定します。
+# サーバが接続を待ち受けるUNIXドメインソケットのパスを指定
 server_address = './udp_socket_file'
 
+#ソケットファイルが残っていた場合、削除
 try:
-    # もし前回の実行でソケットファイルが残っていた場合、そのファイルを削除します。
     os.unlink(server_address)
 except FileNotFoundError:
-    # ファイルが存在しない場合は何もしません。
     pass
 
-# ソケットが起動していることを表示します。
+# ソケットが起動していることを表示、ソケットを特定のアドレスに紐付け
 print('starting up on {}'.format(server_address))
-
-# sockオブジェクトのbindメソッドを使って、ソケットを特定のアドレスに関連付けます。
 sock.bind(server_address)
 
-# ソケットはデータの受信を永遠に待ち続けます。
-while True:
-    print('\nwaiting to receive message')
 
-    # ソケットからのデータを受信します。
-    # 4096は一度に受信できる最大バイト数です。
+
+# ソケットはデータの受信を永遠に待つ
+while True:
+    print('\n-----waiting to receive message-----')
+
+    # ソケットからのデータを受信する
+    # 4096は一度に受信できる最大バイト数
     data, address = sock.recvfrom(4096)
 
     # 受信したデータのバイト数と送信元のアドレスを表示します。
     print('received {} bytes from {}'.format(len(data), address))
-    print(data)
 
-    # 受信したデータをそのまま送信元に送り返します。
+    decodeMassage = data.decode()
+    print("message is：" + decodeMassage)
+    if(decodeMassage == "exit"):
+        print('closing socket')
+        sock.close()
+        
     if data:
-        sent = sock.sendto(data, address)
+        sent = sock.sendto("next?".encode(), address)
         # 送信したバイト数と送信先のアドレスを表示します。
         print('sent {} bytes back to {}'.format(sent, address))
